@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlin.serialization)
+    id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
 }
 
@@ -41,6 +44,28 @@ android {
 }
 
 dependencies {
+
+    coreLibraryDesugaring(libs.android.desugar)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.serialization)
+    implementation(libs.kotlinx.serialization.json)
+
+    ksp(libs.androidx.room.compiler)
+    ksp(libs.hilt.compiler)
+
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+
     implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation(libs.androidx.core.ktx)

@@ -1,5 +1,6 @@
 package com.rimuru.android.sharedcart.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.Instant
@@ -7,8 +8,8 @@ import java.time.Instant
 @Entity(tableName = "products")
 data class ProductEntity (
     @PrimaryKey val id: String,
-    val listId: String,
-    val name: String,
-    val lastUpdate: Instant,
-    val isCompleted: Boolean
+    @ColumnInfo(name = "list_id") val listId: String,
+    @ColumnInfo(name = "last_update") val lastUpdate: Instant,
+    @ColumnInfo(name = "is_completed") val isCompleted: Boolean,
+    val name: String
 )

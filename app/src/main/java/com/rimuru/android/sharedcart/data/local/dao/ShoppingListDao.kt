@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.rimuru.android.sharedcart.data.local.entity.ShoppingListEntity
-import com.rimuru.android.sharedcart.data.local.entity.ShoppingListWithProducts
+import com.rimuru.android.sharedcart.data.local.entity.CompositeShoppingList
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -23,5 +23,5 @@ interface ShoppingListDao {
 
     @Transaction
     @Query("SELECT * FROM shopping_list")
-    fun getListWithProducts(): Flow<List<ShoppingListWithProducts>>
+    fun getListWithProducts(): Flow<List<CompositeShoppingList >>
 }

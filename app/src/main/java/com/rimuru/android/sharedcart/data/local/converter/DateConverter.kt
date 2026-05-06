@@ -3,7 +3,7 @@ package com.rimuru.android.sharedcart.data.local.converter
 import androidx.room.TypeConverter
 import java.time.Instant
 
-class ProductConverter {
+class DateConverter {
     @TypeConverter
     fun fromTimestamp(value: Long?): Instant? {
         return value?.let { Instant.ofEpochMilli(it) }

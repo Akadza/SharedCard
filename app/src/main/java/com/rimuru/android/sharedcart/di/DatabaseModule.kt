@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.rimuru.android.sharedcart.data.local.SharedCartDatabase
 import com.rimuru.android.sharedcart.data.local.dao.ProductDao
+import com.rimuru.android.sharedcart.data.local.dao.ShoppingListDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +25,11 @@ object DatabaseModule {
             SharedCartDatabase::class.java,
             "shared_cart_db"
         ).build()
+    }
+
+    @Provides
+    fun provideShoppingListDao(database: SharedCartDatabase): ShoppingListDao {
+        return database.shoppingListDao()
     }
 
     @Provides

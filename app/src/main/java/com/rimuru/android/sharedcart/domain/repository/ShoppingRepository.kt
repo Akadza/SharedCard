@@ -8,4 +8,5 @@ interface ShoppingRepository {
     fun getAllLists(): Flow<List<ShoppingList>>
     suspend fun saveList(shoppingList: ShoppingList)
     suspend fun deleteList(shoppingList: ShoppingList)
+    fun observeRemoteLists(ownerId: String)
 }

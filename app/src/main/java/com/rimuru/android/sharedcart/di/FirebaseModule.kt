@@ -1,5 +1,8 @@
 package com.rimuru.android.sharedcart.di
 
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +14,7 @@ import javax.inject.Singleton
 object FirebaseModule {
     @Provides
     @Singleton
-    fun provideFirestore(): FireBaseFirestore {
+    fun provideFirestore(): FirebaseFirestore {
         return Firebase.firestore
     }
 }

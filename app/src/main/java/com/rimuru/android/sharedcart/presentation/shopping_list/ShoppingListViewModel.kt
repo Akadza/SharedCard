@@ -25,6 +25,7 @@ class ShoppingListViewModel @Inject constructor(
     val state: StateFlow<ShoppingListState> = _state.asStateFlow()
 
     init {
+        repository.observeRemoteLists(ownerId = "current_user_id")
         loadShoppingLists()
     }
 

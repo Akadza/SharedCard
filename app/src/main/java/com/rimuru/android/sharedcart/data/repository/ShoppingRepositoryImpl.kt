@@ -1,5 +1,6 @@
 package com.rimuru.android.sharedcart.data.repository
 
+import android.util.Log
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.rimuru.android.sharedcart.data.local.dao.ShoppingListDao
@@ -12,9 +13,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ShoppingRepositoryImpl @Inject constructor(
@@ -24,36 +28,49 @@ class ShoppingRepositoryImpl @Inject constructor(
 ): ShoppingRepository {
 
     override fun getAllLists(): Flow<List<ShoppingList>> {
-        return shoppingListDao.getAllShoppingList().map { entities ->
-            entities.map { it.toDomain() }
-        }
+        return shoppingListDao.getAllShoppingList()
+            .map { entities ->
+                entities.map { it.toDomain() }
+            }
+            .flowOn(Dispatchers.IO)
     }
 
     override suspend fun saveList(shoppingList: ShoppingList) {
-        // Room
-        shoppingListDao.insertShoppingList(shoppingList.toEntity())
-        // Firebase
-        try {
-            val listDto = ShoppingListDto(
-                id = shoppingList.id,
-                name = shoppingList.name,
-                ownerId = shoppingList.ownerId
-            )
-            firestore.collection("shopping_lists")
-                .document(listDto.id)
-                .set(listDto)
-                .await()
-        } catch (e: Exception) {
+        withContext(Dispatchers.IO) {
+            try {
+                // Room
+                shoppingListDao.insertShoppingList(shoppingList.toEntity())
 
+                // Firebase
+                val listDto = ShoppingListDto(
+                    id = shoppingList.id,
+                    name = shoppingList.name,
+                    ownerId = shoppingList.ownerId
+                )
+                firestore.collection("shopping_lists")
+                    .document(listDto.id)
+                    .set(listDto)
+                    .await()
+            } catch (e: Exception) {
+                Log.e("ShoppingRepository", "Error saving list: ${e.message}")
+            }
         }
     }
 
     override suspend fun deleteList(shoppingList: ShoppingList) {
-        // Room
-        shoppingListDao.deleteShoppingList(shoppingList.toEntity())
-        // Firebase
-        firestore.collection("shopping_lists").document(shoppingList.id).delete()
-
+        withContext(Dispatchers.IO) {
+            try {
+                // Room
+                shoppingListDao.deleteShoppingList(shoppingList.toEntity())
+                // Firebase
+                firestore.collection("shopping_lists")
+                    .document(shoppingList.id)
+                    .delete()
+                    .await()
+            } catch (e: Exception) {
+                Log.e("ShoppingRepository", "Error deleting list: ${e.message}")
+            }
+        }
     }
 
     override fun observeRemoteLists(ownerId: String) {
@@ -64,14 +81,18 @@ class ShoppingRepositoryImpl @Inject constructor(
 
                 snapshot?.documentChanges?.forEach { change ->
                     val dto = change.document.toObject(ShoppingListDto::class.java)
-                    externalScope.launch {
-                        when (change.type) {
-                            DocumentChange.Type.ADDED, DocumentChange.Type.MODIFIED -> {
-                                shoppingListDao.insertShoppingList(dto.toEntity())
+                    externalScope.launch(Dispatchers.IO) {
+                        try {
+                            when (change.type) {
+                                DocumentChange.Type.ADDED, DocumentChange.Type.MODIFIED -> {
+                                    shoppingListDao.insertShoppingList(dto.toEntity())
+                                }
+                                DocumentChange.Type.REMOVED -> {
+                                    shoppingListDao.deleteShoppingList(dto.toEntity())
+                                }
                             }
-                            DocumentChange.Type.REMOVED -> {
-                                shoppingListDao.deleteShoppingList(dto.toEntity())
-                            }
+                        } catch (e: Exception) {
+                            Log.e("ShoppingRepository", "Error syncing remote changes ${e.message}")
                         }
                     }
                 }

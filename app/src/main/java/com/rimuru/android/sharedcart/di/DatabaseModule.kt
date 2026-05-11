@@ -2,7 +2,6 @@ package com.rimuru.android.sharedcart.di
 
 import android.content.Context
 import androidx.room.Room
-import com.google.api.ContextRule
 import com.rimuru.android.sharedcart.data.local.SharedCartDatabase
 import com.rimuru.android.sharedcart.data.local.dao.ProductDao
 import com.rimuru.android.sharedcart.data.local.dao.ShoppingListDao

@@ -12,5 +12,4 @@ data class ShoppingListEntity (
     @ColumnInfo(name = "owner_id") val ownerId: String,
     @ColumnInfo(name = "created_at") val createdAt: Instant,
     val name: String,
-    val products: List<Product> = emptyList()
 )

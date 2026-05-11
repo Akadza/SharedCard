@@ -5,6 +5,7 @@ import com.google.firebase.firestore.ServerTimestamp
 
 data class ProductDto (
     val id: String = "",
+    val listId: String = "",
     val name: String = "",
     @field:JvmField val isCompleted: Boolean = false,
     @ServerTimestamp val lastUpdate: Timestamp? = null

@@ -2,9 +2,8 @@ package com.rimuru.android.sharedcart.presentation.shopping_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rimuru.android.sharedcart.data.local.entity.ShoppingListEntity
-import com.rimuru.android.sharedcart.domain.model.ShoppingList
-import com.rimuru.android.sharedcart.domain.repository.ShoppingRepository
+import com.rimuru.android.sharedcart.feature.shopping_list.domain.model.ShoppingList
+import com.rimuru.android.sharedcart.feature.shopping_list.domain.repository.ShoppingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

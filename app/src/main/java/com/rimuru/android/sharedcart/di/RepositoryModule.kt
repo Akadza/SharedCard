@@ -1,7 +1,7 @@
 package com.rimuru.android.sharedcart.di
 
-import com.rimuru.android.sharedcart.data.repository.ShoppingRepositoryImpl
-import com.rimuru.android.sharedcart.domain.repository.ShoppingRepository
+import com.rimuru.android.sharedcart.feature.shopping_list.data.repository.ShoppingRepositoryImpl
+import com.rimuru.android.sharedcart.feature.shopping_list.domain.repository.ShoppingRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -3,7 +3,7 @@ package com.rimuru.android.sharedcart.core.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.rimuru.android.sharedcart.data.local.converter.DateConverter
+import com.rimuru.android.sharedcart.core.data.local.converters.DateConverter
 import com.rimuru.android.sharedcart.feature.shopping_list.data.local.ProductDao
 import com.rimuru.android.sharedcart.feature.shopping_list.data.local.ShoppingListDao
 import com.rimuru.android.sharedcart.feature.shopping_list.data.local.ProductEntity

@@ -1,4 +1,4 @@
-package com.rimuru.android.sharedcart.presentation.shopping_list
+package com.rimuru.android.sharedcart.feature.shopping_list.presentation.list_details
 
 import com.rimuru.android.sharedcart.feature.shopping_list.domain.model.ShoppingList
 

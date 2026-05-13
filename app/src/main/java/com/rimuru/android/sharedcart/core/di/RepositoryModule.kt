@@ -1,4 +1,4 @@
-package com.rimuru.android.sharedcart.di
+package com.rimuru.android.sharedcart.core.di
 
 import com.rimuru.android.sharedcart.feature.shopping_list.data.repository.ShoppingRepositoryImpl
 import com.rimuru.android.sharedcart.feature.shopping_list.domain.repository.ShoppingRepository
@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+    abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindShoppingRepository(

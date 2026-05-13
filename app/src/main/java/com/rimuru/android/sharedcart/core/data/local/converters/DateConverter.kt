@@ -1,4 +1,4 @@
-package com.rimuru.android.sharedcart.data.local.converter
+package com.rimuru.android.sharedcart.core.data.local.converters
 
 import androidx.room.TypeConverter
 import java.time.Instant

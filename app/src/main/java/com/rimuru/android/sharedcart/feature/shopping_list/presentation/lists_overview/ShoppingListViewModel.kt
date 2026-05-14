@@ -1,4 +1,4 @@
-package com.rimuru.android.sharedcart.feature.shopping_list.presentation.list_details
+package com.rimuru.android.sharedcart.feature.shopping_list.presentation.lists_overview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

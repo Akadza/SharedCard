@@ -8,7 +8,7 @@ data class CompositeShoppingList (
     @Embedded val shoppingList: ShoppingListEntity,
     @Relation(
         parentColumn = "id",
-        entityColumn = "listId"
+        entityColumn = "list_id"
     )
     val products: List<ProductEntity>
 )

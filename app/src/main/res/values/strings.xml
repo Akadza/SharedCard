@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SharedCart</string>
+
+    <string name="add_list_dialog_name">New Cart</string>
+    <string name="add_list_dialog_icon_desc">Shopping cart</string>
+    <string name="add_list_dialog_text">Give you cart a name so you can find it easily later.</string>
+    <string name="add_list_dialog_btn_confirm">Create</string>
+    <string name="add_list_dialog_btn_cancel">Cancel</string>
+    <string name="add_list_dialog_placeholder">Name your cart</string>
 </resources>

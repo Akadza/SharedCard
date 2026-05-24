@@ -28,6 +28,36 @@ class ShoppingListViewModel @Inject constructor(
         loadShoppingLists()
     }
 
+    fun onEvent(event: ShoppingListEvent) {
+        when(event) {
+            ShoppingListEvent.AddListClicked -> {
+                _state.update { it.copy(isAddDialogVisible = true) }
+            }
+            ShoppingListEvent.AddListDialogDismissed -> {
+                _state.update { it.copy(isAddDialogVisible = false, newListName = "") }
+            }
+            ShoppingListEvent.CreateListConfirmed -> {
+                val name = state.value.newListName.trim()
+                if (name.isBlank()) {
+                    _state.update { it.copy(newListName = "the list name cannot be empty") }
+                    return
+                }
+                createList(name)
+            }
+            ShoppingListEvent.ErrorShown -> {
+                _state.update { it.copy(errorMessage = null) }
+            }
+
+            is ShoppingListEvent.ListClicked -> Unit
+            is ShoppingListEvent.ListNameChanged -> {
+                _state.update { it.copy(newListName = event.name) }
+            }
+            is ShoppingListEvent.DeleteListClicked -> {
+                deleteList(event.list)
+            }
+        }
+    }
+
     private fun loadShoppingLists() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
@@ -35,7 +65,7 @@ class ShoppingListViewModel @Inject constructor(
             repository.getAllLists()
                 .catch { e ->
                     _state.update { it.copy(
-                        error = e.message,
+                        errorMessage = e.message,
                         isLoading = false
                     ) }
                 }
@@ -48,7 +78,7 @@ class ShoppingListViewModel @Inject constructor(
         }
     }
 
-    fun addList(name: String) {
+    private fun createList(name: String) {
         viewModelScope.launch {
             val newList = ShoppingList(
                 id = UUID.randomUUID().toString(),
@@ -58,9 +88,10 @@ class ShoppingListViewModel @Inject constructor(
             )
             repository.saveList(newList)
         }
+        _state.update { it.copy(isAddDialogVisible = false, newListName = "") }
     }
 
-    fun deleteList(shoppingList: ShoppingList) {
+    private fun deleteList(shoppingList: ShoppingList) {
         viewModelScope.launch {
             repository.deleteList(shoppingList)
         }

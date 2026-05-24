@@ -5,5 +5,7 @@ import com.rimuru.android.sharedcart.feature.shopping_list.domain.model.Shopping
 data class ShoppingListState (
     val lists: List<ShoppingList> = emptyList(),
     val isLoading: Boolean = false,
-    val error: String? = null
+    val errorMessage: String? = null,
+    val isAddDialogVisible: Boolean = false,
+    val newListName: String = ""
 )

@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.materialIcon
@@ -40,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,10 +54,12 @@ import okhttp3.internal.wait
 
 @Composable
 fun AddListDialog(
+    name: String,
+    errorMessage: String?,
+    onNameChanged: (String) -> Unit,
     onDismissRequest: () -> Unit,
     onConfirmation: (String) -> Unit,
 ) {
-    var text by remember { mutableStateOf("") }
 
     Dialog(
         onDismissRequest = onDismissRequest
@@ -110,8 +115,23 @@ fun AddListDialog(
                 Spacer(modifier = Modifier.height(28.dp))
 
                 OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
+                    value = name,
+                    onValueChange = { newText -> onNameChanged(newText.replace("\n", " ")) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { onConfirmation(name) }
+                    ),
+                    isError = errorMessage != null,
+                    supportingText = {
+                        errorMessage?.let { Text(
+                            text = errorMessage,
+                            color = MaterialTheme.colorScheme.error
+                        ) }
+                    },
+                    maxLines = 1,
                     shape = RoundedCornerShape(20.dp),
                     placeholder = {
                         Text(
@@ -144,7 +164,7 @@ fun AddListDialog(
                     }
 
                     Button(
-                        onClick = { onConfirmation(text) },
+                        onClick = { onConfirmation(name) },
                         shape = RoundedCornerShape(24.dp),
                         contentPadding = PaddingValues(horizontal = 30.dp, vertical = 12.dp)
                     ) {
@@ -157,14 +177,5 @@ fun AddListDialog(
                 }
             }
         }
-    }
-}
-
-@Preview(name = "Light Theme", showBackground = true)
-@Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun AddListDialogPreview() {
-    SharedCartTheme {
-        AddListDialog({}, {})
     }
 }

@@ -34,12 +34,22 @@ class ShoppingListViewModel @Inject constructor(
                 _state.update { it.copy(isAddDialogVisible = true) }
             }
             ShoppingListEvent.AddListDialogDismissed -> {
-                _state.update { it.copy(isAddDialogVisible = false, newListName = "") }
+                _state.update {
+                    it.copy(
+                        isAddDialogVisible = false,
+                        newListName = "",
+                        errorMessage = null
+                    )
+                }
             }
             ShoppingListEvent.CreateListConfirmed -> {
                 val name = state.value.newListName.trim()
                 if (name.isBlank()) {
-                    _state.update { it.copy(newListName = "the list name cannot be empty") }
+                    _state.update {
+                        it.copy(
+                            errorMessage = "the list name cannot be empty"
+                        )
+                    }
                     return
                 }
                 createList(name)
@@ -50,7 +60,12 @@ class ShoppingListViewModel @Inject constructor(
 
             is ShoppingListEvent.ListClicked -> Unit
             is ShoppingListEvent.ListNameChanged -> {
-                _state.update { it.copy(newListName = event.name) }
+                _state.update {
+                    it.copy(
+                        newListName = event.name,
+                        errorMessage = null
+                    )
+                }
             }
             is ShoppingListEvent.DeleteListClicked -> {
                 deleteList(event.list)
@@ -79,6 +94,13 @@ class ShoppingListViewModel @Inject constructor(
     }
 
     private fun createList(name: String) {
+        _state.update {
+            it.copy(
+                isAddDialogVisible = false,
+                newListName = "",
+                errorMessage = null
+            )
+        }
         viewModelScope.launch {
             val newList = ShoppingList(
                 id = UUID.randomUUID().toString(),
@@ -87,8 +109,8 @@ class ShoppingListViewModel @Inject constructor(
                 createdAt = Instant.now()
             )
             repository.saveList(newList)
+
         }
-        _state.update { it.copy(isAddDialogVisible = false, newListName = "") }
     }
 
     private fun deleteList(shoppingList: ShoppingList) {
